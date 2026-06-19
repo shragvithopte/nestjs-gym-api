@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
-
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Gym, GymDocument } from './schemas/gym.schema';
 @Injectable()
 export class GymService {
+
+  constructor(
+    @InjectModel(Gym.name) private gymModel: Model<GymDocument>,
+  ) {}
 
   private gyms = [
     {
@@ -18,11 +24,22 @@ export class GymService {
     },
   ];
 
-  getAllGyms() {
-    return this.gyms;
-  }
-  createGym(gym: any) {
-  this.gyms.push(gym);
-  return gym;
+  async getAllGyms() {
+  return await this.gymModel.find();
+}
+  async createGym(gym: any) {
+  return await this.gymModel.create(gym);
+}
+async updateGym(id: string, gym: any) {
+  console.log('SERVICE UPDATE:', id, gym);
+
+  return await this.gymModel.findByIdAndUpdate(
+    id,
+    { $set: gym },
+    { new: true },
+  );
+}
+async deleteGym(id: string) {
+  return await this.gymModel.findByIdAndDelete(id);
 }
 }

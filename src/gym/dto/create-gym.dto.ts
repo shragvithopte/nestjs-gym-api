@@ -7,12 +7,12 @@ import {
 export class CreateGymDto {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @IsString()
   @IsNotEmpty()
-  address: string;
+  address!: string;
 
   @IsNumber()
-  rating: number;
+  rating!: number;
 }
